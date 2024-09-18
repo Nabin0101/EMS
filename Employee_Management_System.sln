@@ -13,7 +13,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Models", "Models\Models.csp
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Entities", "Entities\Entities.csproj", "{F4FC1FC8-A770-4679-9A0E-2DABCC0E0322}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Employee_Management_System", "..\Employee\Employee_Management_System\Employee_Management_System.csproj", "{198F14B3-4BB4-46B4-85CD-0BE36564FACD}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Employee_Management_System", "..\..\Employee - Copy\Employee_Management_System\Employee_Management_System.csproj", "{DCDC5C2F-E72C-4C1F-BEAE-C893D5211CCF}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -41,10 +41,10 @@ Global
 		{F4FC1FC8-A770-4679-9A0E-2DABCC0E0322}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F4FC1FC8-A770-4679-9A0E-2DABCC0E0322}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F4FC1FC8-A770-4679-9A0E-2DABCC0E0322}.Release|Any CPU.Build.0 = Release|Any CPU
-		{198F14B3-4BB4-46B4-85CD-0BE36564FACD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{198F14B3-4BB4-46B4-85CD-0BE36564FACD}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{198F14B3-4BB4-46B4-85CD-0BE36564FACD}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{198F14B3-4BB4-46B4-85CD-0BE36564FACD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DCDC5C2F-E72C-4C1F-BEAE-C893D5211CCF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DCDC5C2F-E72C-4C1F-BEAE-C893D5211CCF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DCDC5C2F-E72C-4C1F-BEAE-C893D5211CCF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DCDC5C2F-E72C-4C1F-BEAE-C893D5211CCF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
