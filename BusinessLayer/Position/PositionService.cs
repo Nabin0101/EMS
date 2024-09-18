@@ -1,28 +1,28 @@
-﻿using Data_Access_Layer.ApplicationContext;
+﻿using Common.ViewModel.Position;
 using Data_Access_Layer.Model;
+using DataAccessLayer;
 using Entities.Employee;
-using Infrastructure.Common.ViewModel.Position;
-using Infrastructure.Common.ViewModel.ResponseModel;
 using Microsoft.EntityFrameworkCore;
+using Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Business_Layer.Position
+namespace BusinessLayer.Position
 {
     public class PositionService : IPosition
     {
         private readonly ApplicationDBContext _dbContext;
         private readonly APIResponseModel _apiResponse;
 
-        public PositionService (ApplicationDBContext dbContext, APIResponseModel apiResponse)
+        public PositionService(ApplicationDBContext dbContext, APIResponseModel apiResponse)
         {
             _dbContext = dbContext;
             _apiResponse = apiResponse;
         }
-        public  async Task<APIResponseModel> AddPosition(PositionDTO positionDTO)
+        public async Task<APIResponseModel> AddPosition(PositionDTO positionDTO)
         {
             try
             {
@@ -30,8 +30,8 @@ namespace Business_Layer.Position
                 {
                     PositionName = positionDTO.PositionName
                 };
-               await _dbContext.Positions.AddAsync(position);
-               await _dbContext.SaveChangesAsync();
+                await _dbContext.Positions.AddAsync(position);
+                await _dbContext.SaveChangesAsync();
                 _apiResponse.Data = position;
                 return _apiResponse;
             }
@@ -48,10 +48,10 @@ namespace Business_Layer.Position
             try
             {
                 var positions = await _dbContext.Positions
-                                                 .Select(p => new 
+                                                 .Select(p => new
                                                  {
                                                      p.Id,
-                                                     p.PositionName 
+                                                     p.PositionName
                                                  }).ToListAsync();
 
                 _apiResponse.Data = positions;

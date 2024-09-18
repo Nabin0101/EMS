@@ -4,12 +4,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Infrastructure.Common.ViewModel.Employee
+namespace Common.ViewModel.Employee
 {
-    public  class GroupByModel
+    public class GroupByModel
     {
         public double Salary { get; set; }
         public int Count { get; set; }
-        public List<String> EmployeeName { get; set; }
+        public List<string> EmployeeName { get; set; }
     }
 }

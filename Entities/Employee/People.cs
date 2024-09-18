@@ -1,5 +1,4 @@
-﻿using Data_Access_Layer.Model;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace Entities.Employee
 {

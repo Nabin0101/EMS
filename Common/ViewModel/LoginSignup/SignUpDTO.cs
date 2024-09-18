@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Infrastructure.Common.ViewModel.LoginSignup
+namespace Common.ViewModel.LoginSignup
 {
     public class SignUpDTO
     {

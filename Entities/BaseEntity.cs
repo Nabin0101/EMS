@@ -6,9 +6,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Data_Access_Layer.Model
+namespace Entities
 {
-    public  class BaseEntity
+    public class BaseEntity
     {
         [Key]
         public string Id { get; set; } = Guid.NewGuid().ToString();

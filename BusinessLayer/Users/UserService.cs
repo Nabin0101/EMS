@@ -1,11 +1,11 @@
-﻿using Data_Access_Layer.ApplicationContext;
+﻿using Common.ViewModel.LoginSignup;
 using Data_Access_Layer.Model;
+using DataAccessLayer;
 using Entities.User;
-using Infrastructure.Common.ViewModel.LoginSignup;
-using Infrastructure.Common.ViewModel.ResponseModel;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
+using Models;
 using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
@@ -15,7 +15,7 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Business_Layer.Users
+namespace BusinessLayer.Users
 {
     public class UserService : IUserService
     {

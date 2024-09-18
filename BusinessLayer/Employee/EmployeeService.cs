@@ -1,16 +1,16 @@
-﻿using Business_Layer.EmployeeService;
-using Data_Access_Layer.ApplicationContext;
+﻿using Common.ViewModel.Employee;
+using DataAccessLayer;
 using Entities.Employee;
 using FluentValidation;
 using Infrastructure.Common.ViewModel.Employee;
 using Infrastructure.Common.ViewModel.EmployeeHistory;
-using Infrastructure.Common.ViewModel.ResponseModel;
 using Microsoft.EntityFrameworkCore;
+using Models;
 using Sieve.Models;
 using Sieve.Services;
 using System.Linq;
 
-namespace Business_Layer.Service
+namespace BusinessLayer.Employee
 {
     public class EmployeeService : IEmployeeService
     {
@@ -153,7 +153,7 @@ namespace Business_Layer.Service
                 {
                     TotalRecords = totalCount,
                     PageNumber = sieveModel.Page,
-                    PageSize = sieveModel.PageSize,
+                    sieveModel.PageSize,
                     Employees = response
                 };
                 return _apiResponse;

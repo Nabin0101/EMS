@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Infrastructure.Common.ViewModel.Position
+namespace Common.ViewModel.Position
 {
     public class PositionDTO
     {

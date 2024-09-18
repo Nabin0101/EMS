@@ -1,8 +1,8 @@
-﻿using FluentValidation;
+﻿using Common.ViewModel.Employee;
+using FluentValidation;
 using FluentValidation.Validators;
-using Infrastructure.Common.ViewModel.Employee;
 
-namespace Infrastructure.Common.Validator
+namespace Common.Validator
 {
     public class CustomValidator : AbstractValidator<EmployeeDTO>
     {
@@ -13,7 +13,7 @@ namespace Infrastructure.Common.Validator
                 .Matches("^[a-zA-Z]+$").WithMessage("First Name should contain only alphabets.");
 
             RuleFor(x => x.MiddleName)
-                
+
                 .Matches("^[a-zA-Z]*$").WithMessage("Middle Name should contain only alphabets.")
                 .When(x => !string.IsNullOrEmpty(x.MiddleName));
 
@@ -24,7 +24,7 @@ namespace Infrastructure.Common.Validator
             RuleFor(x => x.Email)
                 .NotEmpty().WithMessage("Email is required")
                 .EmailAddress().WithMessage("Email is not valid");
-                
+
             RuleFor(x => x.Salary)
                 .NotEmpty().WithMessage("Salary is required");
 
@@ -49,12 +49,12 @@ namespace Infrastructure.Common.Validator
 
             RuleFor(x => x.IsDisable)
                 .NotNull().WithMessage("IsDisabled is required")
-                .Must(x => x ==true || x ==false).WithMessage("IsDisabled should be a boolean value.");
+                .Must(x => x == true || x == false).WithMessage("IsDisabled should be a boolean value.");
         }
 
         private bool BeAValidDate(DateTime date)
         {
-            return !date.Equals(default(DateTime));
+            return !date.Equals(default);
         }
     }
 }

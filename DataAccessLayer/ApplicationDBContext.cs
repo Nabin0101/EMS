@@ -9,7 +9,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Data_Access_Layer.ApplicationContext
+namespace DataAccessLayer
 {
     public class ApplicationDBContext : DbContext
     {

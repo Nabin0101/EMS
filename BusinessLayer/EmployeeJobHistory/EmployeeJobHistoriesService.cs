@@ -1,11 +1,10 @@
-﻿
-using Data_Access_Layer.ApplicationContext;
+﻿using Common.ViewModel.EmployeeHistory;
 using Data_Access_Layer.Model;
+using DataAccessLayer;
 using Entities.Employee;
 using Infrastructure.Common.ViewModel.Employee;
-using Infrastructure.Common.ViewModel.EmployeeHistory;
-using Infrastructure.Common.ViewModel.ResponseModel;
 using Microsoft.EntityFrameworkCore;
+using Models;
 using Sieve.Models;
 using Sieve.Services;
 using System;
@@ -15,7 +14,7 @@ using System.Text;
 using System.Threading.Tasks;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
-namespace Business_Layer.EmployeeJobHistory
+namespace BusinessLayer.EmployeeJobHistory
 {
     public class EmployeeJobHistoriesService : IEmployeeJobHistories
     {
@@ -36,7 +35,7 @@ namespace Business_Layer.EmployeeJobHistory
             try
             {
                 var employee = await _dbContext.Employee
-                                               .FirstOrDefaultAsync(a=>a.Id == addEmployeeJob.EmployeeId);
+                                               .FirstOrDefaultAsync(a => a.Id == addEmployeeJob.EmployeeId);
                 if (employee == null)
                 {
                     _apiResponse.Message = "Employee is null";
@@ -77,7 +76,7 @@ namespace Business_Layer.EmployeeJobHistory
 
         public async Task<APIResponseModel> GetAllEmployeeJobHistory(PaginationModel paginationModel)
         {
-            try 
+            try
             {
                 var query = _dbContext.Employee.Include(e => e.People)
                                                .Include(e => e.EmployeeJobHistories)
@@ -85,21 +84,69 @@ namespace Business_Layer.EmployeeJobHistory
                                                .Where(e => !e.IsDeleted)
                                                .AsQueryable()
                                                .AsNoTracking();
-                
+
 
                 var sieveModel = new SieveModel()
                 {
                     PageSize = paginationModel.PageSize,
                     Page = paginationModel.PageNumber,
-                    Filters = !String.IsNullOrEmpty(paginationModel.Filter) ? $"StartDate=={paginationModel.Filter}" : null,
+                    Filters = !string.IsNullOrEmpty(paginationModel.Filter) ? $"StartDate=={paginationModel.Filter}" : null,
                 };
                 var data = _sieveProcessor.Apply(sieveModel, query, applyPagination: false);
-            
+
 
                 var result = data.Skip((paginationModel.PageNumber - 1) * paginationModel.PageSize)
                                  .Take(paginationModel.PageSize);
 
-                var response= await result.Select(e => new EmployeeHistoryDto
+                var response = await result.Select(e => new EmployeeHistoryDto
+                {
+                    EmployeeId = e.Id,
+                    FirstName = e.People.FirstName,
+                    MiddleName = e.People.MiddleName,
+                    LastName = e.People.LastName,
+                    JobHistories = e.EmployeeJobHistories.Select(ejh => new JobHistoryDto
+                    {
+                        PositionId = ejh.PositionId,
+                        PositionName = ejh.Position.PositionName,
+                        StartDate = ejh.StartDate,
+                        EndDate = ejh.EndDate
+                    }).ToList()
+
+                })
+                                               .ToListAsync();
+                var totalCount = result.Count();
+
+                _apiResponse.Data = new
+                {
+                    TotalRecords = totalCount,
+                    PageNumber = sieveModel.Page,
+                    sieveModel.PageSize,
+                    Employees = response
+                };
+
+                return _apiResponse;
+            }
+            catch (Exception ex)
+            {
+                _apiResponse.Message = ex.ToString();
+                _apiResponse.IsSuccess = false;
+                return _apiResponse;
+
+            }
+
+        }
+
+
+        public async Task<APIResponseModel> GetEmployeeHistory(string id)
+        {
+            try
+            {
+                var employee = await _dbContext.Employee
+                                               .Include(e => e.People)
+                                               .Include(e => e.EmployeeJobHistories)
+                                               .ThenInclude(ejh => ejh.Position)
+                                               .Where(e => e.Id == id && !e.IsDeleted)
+                                               .Select(e => new EmployeeHistoryDto
                                                {
                                                    EmployeeId = e.Id,
                                                    FirstName = e.People.FirstName,
@@ -111,71 +158,24 @@ namespace Business_Layer.EmployeeJobHistory
                                                        PositionName = ejh.Position.PositionName,
                                                        StartDate = ejh.StartDate,
                                                        EndDate = ejh.EndDate
-                                                   }).ToList()
+                                                   }).ToList(),
 
                                                })
-                                               .ToListAsync();
-                var totalCount = result.Count();
+                                               .FirstOrDefaultAsync();
 
-                _apiResponse.Data = new
-                {
-                    TotalRecords = totalCount,
-                    PageNumber = sieveModel.Page,
-                    PageSize = sieveModel.PageSize,
-                    Employees = response
-                };
- 
+                _apiResponse.Data = employee;
                 return _apiResponse;
-            }catch (Exception ex)
+
+            }
+            catch (Exception ex)
             {
                 _apiResponse.Message = ex.ToString();
                 _apiResponse.IsSuccess = false;
                 return _apiResponse;
-
             }
+        }
 
-}
-
-
-        public async Task<APIResponseModel> GetEmployeeHistory(string id)
-                {
-                    try
-                    {
-                        var employee = await _dbContext.Employee
-                                                       .Include(e => e.People)
-                                                       .Include(e => e.EmployeeJobHistories)
-                                                       .ThenInclude(ejh => ejh.Position)
-                                                       .Where(e => e.Id == id && !e.IsDeleted)
-                                                       .Select(e => new EmployeeHistoryDto
-                                                       {
-                                                           EmployeeId = e.Id,
-                                                           FirstName = e.People.FirstName,
-                                                           MiddleName = e.People.MiddleName,
-                                                           LastName = e.People.LastName,
-                                                           JobHistories = e.EmployeeJobHistories.Select(ejh => new JobHistoryDto
-                                                           {
-                                                               PositionId =ejh.PositionId,
-                                                               PositionName = ejh.Position.PositionName,
-                                                               StartDate = ejh.StartDate,
-                                                               EndDate = ejh.EndDate
-                                                           }).ToList(),
-                                                   
-                                                       })
-                                                       .FirstOrDefaultAsync();
-
-                        _apiResponse.Data = employee;
-                        return _apiResponse;
-
-                    }
-                    catch (Exception ex)
-                    {
-                        _apiResponse.Message = ex.ToString();
-                        _apiResponse.IsSuccess = false;
-                        return _apiResponse;
-                    }
-                }
-
-        public async Task<APIResponseModel> UpdateEmployeeJobHistory(String id, UpdateEmployeeJobHistoryDto updateEmployeeJobHistoryDto)
+        public async Task<APIResponseModel> UpdateEmployeeJobHistory(string id, UpdateEmployeeJobHistoryDto updateEmployeeJobHistoryDto)
         {
             if (updateEmployeeJobHistoryDto == null)
             {

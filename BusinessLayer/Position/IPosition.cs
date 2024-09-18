@@ -1,8 +1,8 @@
-﻿using Data_Access_Layer.Model;
-using Infrastructure.Common.ViewModel.Position;
-using Infrastructure.Common.ViewModel.ResponseModel;
+﻿using Common.ViewModel.Position;
+using Data_Access_Layer.Model;
+using Models;
 
-namespace Business_Layer.Position
+namespace BusinessLayer.Position
 {
     public interface IPosition
     {
