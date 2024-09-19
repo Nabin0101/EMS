@@ -1,9 +1,8 @@
 ﻿using Common.ViewModel.Employee;
+using Common.ViewModel.EmployeeHistory;
 using DataAccessLayer;
-using Entities.Employee;
+using Entities.Employees; 
 using FluentValidation;
-using Infrastructure.Common.ViewModel.Employee;
-using Infrastructure.Common.ViewModel.EmployeeHistory;
 using Microsoft.EntityFrameworkCore;
 using Models;
 using Sieve.Models;
@@ -63,7 +62,7 @@ namespace BusinessLayer.Employee
                     var utcEndDate = employeeDto.JobEndDate.ToUniversalTime();
 
 
-                    var employee = new Employee
+                    var employee = new Entities.Employees.Employee
                     {
                         PersonId = people.Id,
                         Salary = employeeDto.Salary,
@@ -123,9 +122,6 @@ namespace BusinessLayer.Employee
                     PageSize = paginationModel.PageSize,
                     Page = paginationModel.PageNumber,
                     Filters = paginationModel.Filter,
-                    ////Filters = !string.IsNullOrEmpty(paginationModel.Filter)
-                    ////    ? $"People.FirstName@={paginationModel.Filter},People.LastName@={paginationModel.Filter},People.Email@={paginationModel.Filter},People.Address@={paginationModel.Filter}"
-                    ////    : null
                 };
 
 
@@ -197,15 +193,16 @@ namespace BusinessLayer.Employee
 
                                   })
                           .FirstOrDefaultAsync();
-
-                _apiResponse.Data = employee;
-                return _apiResponse;
+                if (employee == null)
+                {
+                    return APIResponseModel.Failure("Employee not found.");
+                }
+                
+                return APIResponseModel.Success(employee);
             }
             catch (Exception ex)
             {
-                _apiResponse.Message = ex.ToString();
-                _apiResponse.IsSuccess = false;
-                return _apiResponse;
+                return APIResponseModel.Failure(ex.Message);
             }
         }
         public async Task<APIResponseModel> UpdateEmployee(EmployeeUpdateDto employee, string id)
@@ -216,7 +213,7 @@ namespace BusinessLayer.Employee
                 {
                     var existingEmployee = await _dbContext.Employee
                                                              .Include(e => e.People)
-                                                            .FirstOrDefaultAsync(e => e.Id == id);
+                                                              .FirstOrDefaultAsync(e => e.Id == id);
 
                     if (existingEmployee == null)
                     {
@@ -266,7 +263,7 @@ namespace BusinessLayer.Employee
                 }
                 else if (employee.IsDeleted)
                 {
-                    _apiResponse.Message = "This Employee hass been deleted";
+                    _apiResponse.Message = "This Employee has already  deleted";
                     _apiResponse.IsSuccess = false;
                     return _apiResponse;
                 }

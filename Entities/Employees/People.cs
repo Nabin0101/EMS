@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace Entities.Employee
+namespace Entities.Employees
 {
     public class People : BaseEntity
     {

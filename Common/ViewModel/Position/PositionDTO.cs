@@ -10,7 +10,7 @@ namespace Common.ViewModel.Position
     public class PositionDTO
     {
         [Required]
-        [RegularExpression(@"^[A-Za-z]+( [A-Za-z]+)$", ErrorMessage = "PositionName should contain alphabetic values only")]
+        [RegularExpression(@"^[a-zA-Z]+( [a-zA-Z]+)*$", ErrorMessage = "PositionName should contain alphabetic values only")]
         public string PositionName { get; set; }
     }
 }

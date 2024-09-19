@@ -1,5 +1,4 @@
 ﻿using Common.ViewModel.Employee;
-using Data_Access_Layer.Model;
 using Microsoft.EntityFrameworkCore;
 using Models;
 using Sieve.Models;

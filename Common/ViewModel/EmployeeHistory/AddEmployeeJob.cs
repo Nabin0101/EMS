@@ -15,9 +15,13 @@ namespace Common.ViewModel.EmployeeHistory
         [Required(ErrorMessage = "Position  Id is required")]
         public string PositionId { get; set; }
         [Required(ErrorMessage = "StartDate   is required")]
+
+        [DataType(DataType.Date)]
         public DateTime StartDate { get; set; }
 
         [Required(ErrorMessage = "EndDate   is required")]
+
+        [DataType(DataType.Date)]
         public DateTime EndDate { get; set; }
     }
 }

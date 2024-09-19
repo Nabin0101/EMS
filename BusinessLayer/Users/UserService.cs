@@ -1,5 +1,4 @@
 ﻿using Common.ViewModel.LoginSignup;
-using Data_Access_Layer.Model;
 using DataAccessLayer;
 using Entities.User;
 using Microsoft.EntityFrameworkCore;

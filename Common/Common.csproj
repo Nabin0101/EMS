@@ -7,8 +7,12 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Enum\" />
-    <Folder Include="Constant\" />
+    <Compile Remove="Constant\**" />
+    <Compile Remove="Enum\**" />
+    <EmbeddedResource Remove="Constant\**" />
+    <EmbeddedResource Remove="Enum\**" />
+    <None Remove="Constant\**" />
+    <None Remove="Enum\**" />
   </ItemGroup>
 
 	<ItemGroup>

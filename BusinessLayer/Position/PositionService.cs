@@ -1,7 +1,7 @@
 ﻿using Common.ViewModel.Position;
-using Data_Access_Layer.Model;
+
 using DataAccessLayer;
-using Entities.Employee;
+using Entities.Employees;
 using Microsoft.EntityFrameworkCore;
 using Models;
 using System;
@@ -48,6 +48,7 @@ namespace BusinessLayer.Position
             try
             {
                 var positions = await _dbContext.Positions
+                                                 .OrderByDescending(x =>x.PositionName)
                                                  .Select(p => new
                                                  {
                                                      p.Id,

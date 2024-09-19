@@ -1,8 +1,6 @@
 ﻿using Common.ViewModel.EmployeeHistory;
-using Data_Access_Layer.Model;
 using DataAccessLayer;
-using Entities.Employee;
-using Infrastructure.Common.ViewModel.Employee;
+using Entities.Employees;
 using Microsoft.EntityFrameworkCore;
 using Models;
 using Sieve.Models;
@@ -38,30 +36,33 @@ namespace BusinessLayer.EmployeeJobHistory
                                                .FirstOrDefaultAsync(a => a.Id == addEmployeeJob.EmployeeId);
                 if (employee == null)
                 {
-                    _apiResponse.Message = "Employee is null";
+                    _apiResponse.Message = "Employee with this id is not found ";
                     _apiResponse.IsSuccess = false;
                     return _apiResponse;
                 }
-
+                
                 var position = await _dbContext.Positions
-                               //.Select(ep => ep.Position)
-                               .FirstOrDefaultAsync(p => p.Id == addEmployeeJob.PositionId);
+                               .                FirstOrDefaultAsync(p => p.Id == addEmployeeJob.PositionId);
                 if (position == null)
                 {
-                    _apiResponse.Message = "Position is null";
+                    _apiResponse.Message = "Position with  this id is not found";
                     _apiResponse.IsSuccess = false;
                     return _apiResponse;
                 }
 
-                var employeeJobHistory = new EmployeeJobHistories
+                var utcStartDate = addEmployeeJob.StartDate.ToUniversalTime();
+                var utcEndDate = addEmployeeJob.EndDate.ToUniversalTime();
+
+                var employeeJobHistory = new EmployeeJobHistories()
                 {
                     EmployeeId = addEmployeeJob.EmployeeId,
                     PositionId = addEmployeeJob.PositionId,
-                    StartDate = addEmployeeJob.StartDate,
-                    EndDate = addEmployeeJob.EndDate
+                    StartDate = utcStartDate,
+                    EndDate = utcEndDate
                 };
+                
                 _dbContext.EmployeeJobHistories.Add(employeeJobHistory);
-                _dbContext.SaveChanges();
+                 _dbContext.SaveChanges();
 
                 _apiResponse.Data = employeeJobHistory;
                 return _apiResponse;
@@ -90,7 +91,7 @@ namespace BusinessLayer.EmployeeJobHistory
                 {
                     PageSize = paginationModel.PageSize,
                     Page = paginationModel.PageNumber,
-                    Filters = !string.IsNullOrEmpty(paginationModel.Filter) ? $"StartDate=={paginationModel.Filter}" : null,
+                    Filters = !string.IsNullOrEmpty(paginationModel.Filter) ? $"StartDate>={paginationModel.Filter}" : null,
                 };
                 var data = _sieveProcessor.Apply(sieveModel, query, applyPagination: false);
 
@@ -177,16 +178,23 @@ namespace BusinessLayer.EmployeeJobHistory
 
         public async Task<APIResponseModel> UpdateEmployeeJobHistory(string id, UpdateEmployeeJobHistoryDto updateEmployeeJobHistoryDto)
         {
-            if (updateEmployeeJobHistoryDto == null)
-            {
-                _apiResponse.Message = "There is no job history of this id";
-                _apiResponse.IsSuccess = false;
-                return _apiResponse;
-            }
             try
             {
                 var existingJobHistory = await _dbContext.EmployeeJobHistories
-                    .FirstOrDefaultAsync(j => j.Id == id);
+                                                        .FirstOrDefaultAsync(j => j.Id == id);
+
+                if (existingJobHistory == null)
+                {
+                    _apiResponse.Message = "Employee with this id have no job  history";
+                    return _apiResponse;
+                }
+                else if(existingJobHistory.PositionId==updateEmployeeJobHistoryDto.PositionId)
+                {
+                    _apiResponse.Message = "Employee already have same position previously";
+                    _apiResponse.IsSuccess = false;
+                    return _apiResponse;
+
+                }
 
                 existingJobHistory.PositionId = updateEmployeeJobHistoryDto.PositionId;
                 existingJobHistory.StartDate = updateEmployeeJobHistoryDto.StartDate.ToUniversalTime();

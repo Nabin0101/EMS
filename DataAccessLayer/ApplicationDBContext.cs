@@ -1,6 +1,4 @@
-﻿using Data_Access_Layer.Model;
-using Microsoft.EntityFrameworkCore;
-using Entities.Employee;
+﻿using Microsoft.EntityFrameworkCore;
 using Entities.User;
 using Microsoft.EntityFrameworkCore.Migrations;
 using System;
@@ -8,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Entities.Employees;
 
 namespace DataAccessLayer
 {
